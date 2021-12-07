@@ -22,7 +22,7 @@ def summarize(G: Graph, run: int = 0) -> dict:
     if len(G.longest_path) == 0:
         return {"run": run, "s": G.s, "x": G.x, "y": G.y, "s_len": len(G.s), "x_len": len(G.x),
                 "y_len": len(G.y), "x_count": 0, "y_count": 0, "interweaving": [],
-                "interweaving_len": 0}
+                "interweaving_len": 0, "n_ops": G.n_ops, "n_comps": G.n_comps}
     x_count = count_signals(G.longest_path, signal="x")
     y_count = count_signals(G.longest_path, signal="y")
     ranks = G.longest_path.keys()
@@ -32,7 +32,7 @@ def summarize(G: Graph, run: int = 0) -> dict:
     y = "".join([str(_) for _ in G.y])
     return {"run": run, "s": s, "x": x, "y": y, "s_len": len(G.s), "x_len": len(G.x),
             "y_len": len(G.y), "x_count": x_count, "y_count": y_count, "interweaving": interweaving,
-            "interweaving_len": len(interweaving)}
+            "interweaving_len": len(interweaving), "n_ops": G.n_ops, "n_comps": G.n_comps}
 
 
 def validate_candidate_interweaving(s: t.List[str]):

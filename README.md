@@ -7,10 +7,8 @@ and outputs, an example output file, and licensing.**
 
 ## Lab Structure
 
-* ```pa2/``` Python module selects the m nearest point pairs among a list of n randomly distributed
-  points.
+* ```pa2/``` Python module selects the longest interweaving, if it exists, of x and y in s.
 * ```analysis/``` PDF of pseudo code of the algorithms used by the ```pa2``` module plus analysis
   of runtime complexity and a comparison between the pseudo code and the implemented algorithms.
-* ```resources/``` Provides default and test datasets; each input has its correspondingly-named
-  output. Inputs and outputs are organized in ```resources/inputs/``` and ```resources/outputs/```, 
-  respectively.
+  Includes reflection on lessons learned.
+* ```resources/``` Provides default output datasets and echoed inputs.

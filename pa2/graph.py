@@ -25,7 +25,8 @@ class Graph:
         self.T = []
         self.max_rank_node = None
         self.path = {}
-        self.n_comp = 0
+        self.n_comps = 0
+        self.n_ops = 0
 
     def add_adj(self, node: Node):
         """
@@ -33,6 +34,7 @@ class Graph:
         :param node: Node to add to root
         """
         self.root.adj[(node.i, node.j)] = node
+        self.n_ops += 1
 
     def build_graph(self):
         """
@@ -120,14 +122,15 @@ class Graph:
 
         # Return the empty path if node rank is zero
         if node.rank == 0:
+            self.n_ops += 1
             return self.path
 
         # If max rank is only 1, we simply set the path as that one node
+        self.n_ops += 1
         self.path = {rank: {"node": node,
                             "signal": "x" if node.x_match else "y",
                             "s_ix": node.i + node.j,
                             "s_char": node.s}}
-
         # If max node rank is greater than 1, we iterate over qualifying nodes by rank
         if node.rank > 1:
 
@@ -145,54 +148,68 @@ class Graph:
                                             "signal": signal,
                                             "s_ix": node.i + node.j,
                                             "s_char": node.s}
+                    self.n_ops += 2  # One for if / else, the other for adding node to dict
+                    self.n_comps += 1  # One for the if / else
 
                 # Otherwise, terminate the while loop when node rank == 1
                 else:
+                    self.n_ops += 1
                     break
-
+        self.n_ops += 1
         return self.path
 
     def find_longest_path(self) -> dict:
         """
-        Find longest unpruned path in graph.
+        Find longest un-pruned path in graph.
         :return: Longest un-pruned path
         """
         ranks = c.defaultdict(list)
         self.longest_path = {}
         path_nodes = set()
+        self.n_ops += 3  # Three for the three lines above
 
         # Build the ranks dictionary which organizes nodes by ranks
         for ij, node in self.root.adj.items():
             ranks[node.rank].append(node)
+            self.n_ops += 2  # Two for the above 2 lines
 
         # Iterate over each rank from highest to lowest
         for rank in reversed(sorted(ranks.keys())):
-
+            self.n_ops += 1
             # Return empty longest path in case when rank == 0
             if rank == 0:
+                self.n_ops += 2
                 return self.longest_path
 
             # If the longest path is already longer than the current rank, return path
             if len(self.longest_path) > rank:
+                self.n_ops += 2
                 return self.longest_path
 
             # Iterate over each node in the ranks dictionary
             for ix, node in enumerate(ranks[rank]):
+                self.n_ops += 1  # One operation each time above line executed
 
                 # We only need to process highest-ranked node in path
                 # Only process those highest-ranked nodes that haven't already been included in path_nodes set
+                self.n_ops += 1  # One for if statement below
                 if ix == 0 and node not in path_nodes:
 
                     # Add path items to path_nodes set so we only traverse unique trees
+                    # n_ops and n_comps accounted for in find_path method
                     path = self.find_path(self.T[node.i][node.j])
                     for rank, di in path.items():
                         path_nodes.add(di["node"])
+                        self.n_ops += 1
 
                     # Prune path items that don't satisfy requirement that x and y repetitions be complete
-                    path = prune_path(path, self.x, self.y)
+                    path, prune_ops = prune_path(path, self.x, self.y)
+                    self.n_ops += prune_ops
                     if len(path) > len(self.longest_path):
                         self.longest_path = path
+                        self.n_ops += 2  # Two ops: one for if line and the other for self.longest_path = path line
 
+        self.n_ops += 1  # One for return statement
         return self.longest_path
 
     def get_length(self) -> int:
@@ -201,6 +218,7 @@ class Graph:
         :return: Integer length of table
         """
         self.length = len(self.T)
+        self.n_ops += 2  # Two operations, one for the above line and one for the below line
         return self.length
 
     def link(self, node: Node):
@@ -219,3 +237,5 @@ class Graph:
         if make_y_link:
             node.down = down_node
             down_node.up = node
+        self.n_comps += 2
+        self.n_ops += 11

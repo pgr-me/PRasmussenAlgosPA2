@@ -64,7 +64,7 @@ def get_y_ij(y: t.List[int], s: t.List[int], i: int, j: int) -> t.Union[int, Non
         return None
 
 
-def prune_path(path_: dict, x: t.List[int], y: t.List[int]) -> dict:
+def prune_path(path_: dict, x: t.List[int], y: t.List[int]) -> t.Tuple[dict, int]:
     """
     Prune path so that it only contains complete sequences of x and y.
     :param path_: Un-pruned path
@@ -75,8 +75,10 @@ def prune_path(path_: dict, x: t.List[int], y: t.List[int]) -> dict:
     path = deepcopy(path_)
     x_count = count_signals(path, signal="x")
     y_count = count_signals(path, signal="y")
+    n_ops = 3  # Three for the above lines
     while (x_count % len(x) != 0) or (y_count % len(y) != 0):
         path.pop(max(path))
         x_count = count_signals(path, signal="x")
         y_count = count_signals(path, signal="y")
-    return path
+        n_ops += 5  # Five for the while loop lines and three lines below and the return statement
+    return path, n_ops
