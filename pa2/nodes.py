@@ -26,6 +26,7 @@ class Node:
         self.left = None
         self.right = None
         self.up = None
+        self.rank = 0
 
     def __repr__(self):
         return f"Node i={self.i}, j={self.j}"
