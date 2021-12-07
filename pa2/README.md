@@ -1,30 +1,30 @@
-# Peter Rasmussen, Programming Assignment 1
+# Peter Rasmussen, Programming Assignment 2
 
 This Python 3 program finds the m nearest pairs of n randomly generated, two-dimensional points.
 
 ## Getting Started
 
 The package is designed to be executed as a module from the command line. The user must specify the
-input file path and output directory as illustrated below. The PRasmussenAlgosPA1/resources
+input file path and output directory as illustrated below. The PRasmussenAlgospa2/resources
 directory provides example input and output files for the user. The
-PRasmussenAlgosPA1/resources/inputs/default.csv file provides 24 n-m combinations.
+PRasmussenAlgospa2/resources/inputs/default.csv file provides 24 n-m combinations.
 
 ```shell
-python -m path/to/pa1 -i path/to/in_file.csv -o path/to/out_dir/ 
+python -m path/to/pa2 -i path/to/in_file.csv -o path/to/out_dir/ 
 ```
 
 Optionally, the user may specify a file header that is prepended to the outputs. The example below
 illustrates usage of the optional argument.
 
 ```shell
-python -m path/to/pa1 -i path/to/in_file.csv -o path/to/out_dir/ -f "Your Header"
+python -m path/to/pa2 -i path/to/in_file.csv -o path/to/out_dir/ -f "Your Header"
 ```
 
 Finally, the user may specify the random seed used to generate the randomly distributed set of
 points, as the example below shows.
 
 ```shell
-python -m path/to/pa1 -i path/to/in_file.csv -o path/to/out_dir/ -s 777
+python -m path/to/pa2 -i path/to/in_file.csv -o path/to/out_dir/ -s 777
 ```
 
 A summary of the command line arguments is below.
